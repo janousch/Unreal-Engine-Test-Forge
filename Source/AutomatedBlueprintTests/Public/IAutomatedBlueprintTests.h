@@ -1,4 +1,4 @@
-// Copyright 2023 Epic Games, Inc. All Rights Reserved.
+// Copyright 2023 Ramon Janousch. All Rights Reserved.
 
 #pragma once
 

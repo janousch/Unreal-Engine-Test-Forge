@@ -1,22 +1,20 @@
-// Copyright 1998-2019 Epic Games, Inc. All Rights Reserved.
+// Copyright 2023 Ramon Janousch. All Rights Reserved.
 
 #include <AssetToolsModule.h>
 #include <CoreMinimal.h>
-#include <IAssetTypeActions.h>
 #include <ISettingsModule.h>
-#include <ISettingsSection.h>
 #include <Modules/ModuleManager.h>
 
 #define LOCTEXT_NAMESPACE "AutomatedBlueprintTests"
 
 IMPLEMENT_MODULE(FAutomatedBlueprintTestsEditor, AutomatedBlueprintTestsEditor)
 
-void FDaedalicTestAutomationPluginEditor::StartupModule()
+void FAutomatedBlueprintTestsEditor::StartupModule()
 {
     
 }
 
-void FDaedalicTestAutomationPluginEditor::ShutdownModule()
+void FAutomatedBlueprintTestsEditor::ShutdownModule()
 {
     
 }

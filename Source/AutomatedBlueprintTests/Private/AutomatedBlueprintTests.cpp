@@ -1,4 +1,4 @@
-// Copyright 1998-2019 Epic Games, Inc. All Rights Reserved.
+// Copyright 2023 Ramon Janousch. All Rights Reserved.
 
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
