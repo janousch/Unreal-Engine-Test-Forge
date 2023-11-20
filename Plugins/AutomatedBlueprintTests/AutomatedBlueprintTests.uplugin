@@ -1,0 +1,36 @@
+{
+    "FileVersion": 3,
+    "Version": 1,
+    "VersionName": "1.2.0",
+    "FriendlyName": "Automated Blueprint Tests",
+    "Description": "Facilitates setting up integration test suites with Gauntlet.",
+    "Category": "Automated Blueprint Tests",
+    "CreatedBy": "Ramon Janousch",
+    "CreatedByURL": "https://www.RamonJanousch.com/",
+    "DocsURL": "https://github.com/janousch/AutomatedBlueprintTests",
+    "EngineVersion": "4.27.0",
+    "MarketplaceURL": "",
+    "SupportURL": "https://github.com/janousch/AutomatedBlueprintTests/issues",
+    "EnabledByDefault": false,
+    "CanContainContent": true,
+    "IsBetaVersion": true,
+    "Installed": false,
+    "Modules": [
+        {
+            "Name": "AutomatedBlueprintTests",
+            "Type": "Runtime",
+            "LoadingPhase": "Default"
+        },
+        {
+            "Name": "AutomatedBlueprintTestsEditor",
+            "Type": "Editor",
+            "LoadingPhase": "PreDefault"
+        }
+    ],
+    "Plugins": [
+        {
+            "Name": "Gauntlet",
+            "Enabled": true
+        }
+    ]
+}
