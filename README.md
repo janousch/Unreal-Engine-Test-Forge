@@ -52,7 +52,7 @@ We feel like software testing is far too important not to be supported by automa
 
 ### Prerequisites
 
-Daedalic Test Automation Plugin currently supports the following Unreal Engine Versions:
+Automated Blueprint Tests Plugin currently supports the following Unreal Engine Versions:
 
 * 4.27
 * 5.0
@@ -331,7 +331,7 @@ RunUnreal
 -platform=Win64
 -configuration=Development
 -build=editor
--test="DaedalicTestAutomationPlugin.Automation.DaeGauntletTest(JUnitReportPath=C:\Projects\UnrealGame\Saved\Reports\junit-report.xml,ReportPath=C:\Projects\UnrealGame\Saved\Reports)"
+-test="AutomatedBlueprintTests.Automation.AbtGauntletTest(JUnitReportPath=C:\Projects\UnrealGame\Saved\Reports\junit-report.xml,ReportPath=C:\Projects\UnrealGame\Saved\Reports)"
 ```
 
 
@@ -341,7 +341,7 @@ RunUnreal
 
 Sometimes, you'll want to use a special configuration for running your tests. For instance, for Gollum, we needed to disable playing the intro sequences of levels to test the performance of.
 
-In Edit > Project Settings > Plugins > Daedalic Test Automation Plugin, you can specify console variables to be set before running batches of tests (e.g. through the automation window or Gauntlet). When using the automation window, the original values of these console variables will be stored before and restored after each test has run. For Gauntlet, this isn't necessary, as console variables have session scope.
+In Edit > Project Settings > Plugins > Automated Blueprint Tests Plugin, you can specify console variables to be set before running batches of tests (e.g. through the automation window or Gauntlet). When using the automation window, the original values of these console variables will be stored before and restored after each test has run. For Gauntlet, this isn't necessary, as console variables have session scope.
 
 ![Console Variables Settings](Documentation/SettingsConsoleVariables.png)
 
@@ -352,7 +352,7 @@ Note that these console variables won't be applied when running tests directly i
 
 ### JUnit Test Reports
 
-When running tests through Gauntlet, Daedalic Test Automation Plugin can generate test reports to publish with your CI/CD pipeline.
+When running tests through Gauntlet, Automated Blueprint Tests Plugin can generate test reports to publish with your CI/CD pipeline.
 
 When generating _JUnit reports_ (by specifying the `JUnitReportPath` for [Gauntlet](#gauntlet)), the plugin uses a standardized format based on `org.junit.platform.reporting.legacy.xml.XmlReportWriter.writeTestsuite`, allowing you to publish the report just as you would when using JUnit. Here's an example of how the results look like when published with [Jenkins](https://www.jenkins.io/):
 
@@ -362,17 +362,17 @@ Test reports will be (over-)written after each individual test, to ensure to be 
 
 ### Custom Test Reports
 
-When building your own tests, you can also have the plugin write _custom reports_. This isn't exposed to blueprints, so you'll have to extend `ADaeTestActor` in C++. 
+When building your own tests, you can also have the plugin write _custom reports_. This isn't exposed to blueprints, so you'll have to extend `AAbtTestActor` in C++. 
 
 In addition to implementing `NotifyOnArrange`, `ReceiveOnAct_Implementation` and `NotifyOnAssert` as you like, you'll have to implement two methods for generating your custom reports:
 
 First, `CollectResults` should return a shared pointer to custom test result data you want to publish in your reports. This data will be stored along with the default result data the plugin collects for all tests. Here's an example from our performance test implementation:
 
 ```
-TSharedPtr<FDaeTestResultData> ADaeTestPerformanceBudgetActor::CollectResults() const
+TSharedPtr<FAbtTestResultData> AAbtTestPerformanceBudgetActor::CollectResults() const
 {
-    TSharedPtr<FDaeTestPerformanceBudgetResultData> Results =
-        MakeShareable(new FDaeTestPerformanceBudgetResultData());
+    TSharedPtr<FAbtTestPerformanceBudgetResultData> Results =
+        MakeShareable(new FAbtTestPerformanceBudgetResultData());
 
     Results->BudgetViolations = BudgetViolations;
 
@@ -380,34 +380,34 @@ TSharedPtr<FDaeTestResultData> ADaeTestPerformanceBudgetActor::CollectResults() 
 }
 ```
 
-Your custom result data class needs to extend `FDaeTestResultData` and implement `GetDataType`. As test results are no `UObject`s, the plugin uses this method for allowing you to safely type-cast your result data in your custom report writers:
+Your custom result data class needs to extend `FAbtTestResultData` and implement `GetDataType`. As test results are no `UObject`s, the plugin uses this method for allowing you to safely type-cast your result data in your custom report writers:
 
 ```
-FName FDaeTestPerformanceBudgetResultData::GetDataType() const
+FName FAbtTestPerformanceBudgetResultData::GetDataType() const
 {
-    return TEXT("FDaeTestPerformanceBudgetResultData");
+    return TEXT("FAbtTestPerformanceBudgetResultData");
 }
 ```
 
 Second, `GetReportWriters` should return a set of report writers that are supposed to write reports for your test. The plugin will call that method for each individual test and merge the results, avoiding duplicate report writers. In the example of our performance testing, we're allowing the user to specify whether they want to include the test in the default JUnit report as well:
 
 ```
-FDaeTestReportWriterSet ADaeTestPerformanceBudgetActor::GetReportWriters() const
+FAbtTestReportWriterSet AAbtTestPerformanceBudgetActor::GetReportWriters() const
 {
-    FDaeTestReportWriterSet ReportWriters;
+    FAbtTestReportWriterSet ReportWriters;
 
     if (bIncludeInDefaultTestReport)
     {
-        FDaeTestReportWriterSet DefaultReportWriters = Super::GetReportWriters();
+        FAbtTestReportWriterSet DefaultReportWriters = Super::GetReportWriters();
         ReportWriters.Add(DefaultReportWriters);
     }
 
-    ReportWriters.Add(MakeShareable(new FDaeTestReportWriterPerformance()));
+    ReportWriters.Add(MakeShareable(new FAbtTestReportWriterPerformance()));
     return ReportWriters;
 }
 ```
 
-Your own report writer needs to extend `FDaeTestReportWriter` and implement two methods again: `GetReportType` is used for comparing the types of report writers, as we aren't using `UObjects` here again. `WriteReport` is supposed to actually write your report data to disk. Basically, you're allowed to do anything you want here, but usually, this includes the following steps:
+Your own report writer needs to extend `FAbtTestReportWriter` and implement two methods again: `GetReportType` is used for comparing the types of report writers, as we aren't using `UObjects` here again. `WriteReport` is supposed to actually write your report data to disk. Basically, you're allowed to do anything you want here, but usually, this includes the following steps:
 
 1. Use `IPlatformFile` to ensure that the path to write your reports to exists.
 1. Iterate over all test suites and their respective results to collect your report data.
@@ -416,15 +416,15 @@ Your own report writer needs to extend `FDaeTestReportWriter` and implement two 
 Again, here's an example from our performance report writer for collecting report data:
 
 ```
-for (const FDaeTestSuiteResult& TestSuiteResult : TestSuites)
+for (const FAbtTestSuiteResult& TestSuiteResult : TestSuites)
 {
-    for (const FDaeTestResult& TestResult : TestSuiteResult.TestResults)
+    for (const FAbtTestResult& TestResult : TestSuiteResult.TestResults)
     {
         if (TestResult.Data != nullptr
-            && TestResult.Data->GetDataType() == TEXT("FDaeTestPerformanceBudgetResultData"))
+            && TestResult.Data->GetDataType() == TEXT("FAbtTestPerformanceBudgetResultData"))
         {
-            TSharedPtr<FDaeTestPerformanceBudgetResultData> Data =
-                StaticCastSharedPtr<FDaeTestPerformanceBudgetResultData>(TestResult.Data);
+            TSharedPtr<FAbtTestPerformanceBudgetResultData> Data =
+                StaticCastSharedPtr<FAbtTestPerformanceBudgetResultData>(TestResult.Data);
 
             // ...
         }
@@ -446,7 +446,7 @@ There are a few best practices we learned when writing tests, and we want to sha
 
 ## Bugs, Questions & Feature Requests
 
-Daedalic Test Automation Plugin is still under heavy development. Whenever you're experiencing issues, missing a feature, or you just don't understand a part of the plugin, after verifying that you are using the [latest version](https://github.com/DaedalicEntertainment/ue4-test-automation/releases) and having checked whether a [similar issue](https://github.com/DaedalicEntertainment/ue4-test-automation/issues) has already been reported, feel free to [open a new issue](https://github.com/DaedalicEntertainment/ue4-test-automation/issues/new). In order to help us resolving your problem as fast as possible, please include the following details in your report:
+Automated Blueprint Tests Plugin is still under heavy development. Whenever you're experiencing issues, missing a feature, or you just don't understand a part of the plugin, after verifying that you are using the [latest version](https://github.com/janousch/Automated-Blueprint-Tests/releases) and having checked whether a [similar issue](https://github.com/janousch/Automated-Blueprint-Tests/issues) has already been reported, feel free to [open a new issue](https://github.com/janousch/Automated-Blueprint-Tests/issues/new). In order to help us resolving your problem as fast as possible, please include the following details in your report:
 
 * Steps to reproduce
 * What happened?
