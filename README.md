@@ -489,3 +489,4 @@ Automated Blueprint Tests Plugin is released under the [MIT License](https://git
 * Masella, Robert. Rare, Ltd. Automated Testing of Gameplay Features in 'Sea of Thieves'. https://www.gdcvault.com/play/1026366/Automated-Testing-of-Gameplay-Features, 2019.
 * Fray, Andrew. Spry Fox. Practical Unit Tests. https://www.gdcvault.com/play/1020353/Practical-Unit, 2014.
 * The JUnit Team. JUnit 5 User Guide. https://junit.org/junit5/docs/current/user-guide, 2020.
+* Daedalic Entertainment. UE4 Test Automation. https://github.com/DaedalicEntertainment/ue4-test-automation
