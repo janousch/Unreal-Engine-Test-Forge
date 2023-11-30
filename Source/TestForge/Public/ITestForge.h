@@ -11,7 +11,7 @@
  * The public interface to this module.  In most cases, this interface is only public to sibling modules 
  * within this plugin.
  */
-class IAutomatedBlueprintTests : public IModuleInterface
+class ITestForge : public IModuleInterface
 {
 
 public:
@@ -22,9 +22,9 @@ public:
 	 *
 	 * @return Returns singleton instance, loading the module on demand if needed
 	 */
-	static inline IAutomatedBlueprintTests& Get()
+	static inline ITestForge& Get()
 	{
-		return FModuleManager::LoadModuleChecked< IAutomatedBlueprintTests >( "AutomatedBlueprintTests" );
+		return FModuleManager::LoadModuleChecked< ITestForge >( "TestForge" );
 	}
 
 	/**
@@ -34,7 +34,8 @@ public:
 	 */
 	static inline bool IsAvailable()
 	{
-		return FModuleManager::Get().IsModuleLoaded( "AutomatedBlueprintTests" );
+		return FModuleManager::Get().IsModuleLoaded( "TestForge" );
 	}
 };
+
 

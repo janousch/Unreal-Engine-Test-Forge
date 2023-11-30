@@ -2,9 +2,9 @@
 
 namespace UnrealBuildTool.Rules
 {
-	public class AutomatedBlueprintTestsCore : ModuleRules
+	public class TestForgeCore : ModuleRules
 	{
-		public AutomatedBlueprintTestsCore(ReadOnlyTargetRules Target) : base(Target)
+		public TestForgeCore(ReadOnlyTargetRules Target) : base(Target)
 		{
             PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
@@ -26,13 +26,13 @@ namespace UnrealBuildTool.Rules
 					"Core",
                     "CoreUObject",
                     "Engine",
-                    "InputCore",
-                    "Gauntlet",
-                    "UMG",
-                    "SlateCore",
-                    "Slate",
-                    "RenderCore",
-                    "Projects"
+                    //"InputCore",
+                    //"Gauntlet",
+                    //"UMG",
+                    //"SlateCore",
+                    //"Slate",
+                    //"RenderCore",
+                    //"Projects"
                 }
 				);
 
@@ -52,3 +52,4 @@ namespace UnrealBuildTool.Rules
 		}
 	}
 }
+

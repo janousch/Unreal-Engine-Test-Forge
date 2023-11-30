@@ -2,31 +2,32 @@
 
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
-#include "IAutomatedBlueprintTests.h"
+#include "ITestForge.h"
 
 
-class FAutomatedBlueprintTests : public IAutomatedBlueprintTests
+class FTestForge : public ITestForge
 {
 	/** IModuleInterface implementation */
 	virtual void StartupModule() override;
 	virtual void ShutdownModule() override;
 };
 
-IMPLEMENT_MODULE( FAutomatedBlueprintTests, AutomatedBlueprintTests )
+IMPLEMENT_MODULE( FTestForge, TestForge )
 
 
 
-void FAutomatedBlueprintTests::StartupModule()
+void FTestForge::StartupModule()
 {
 	// This code will execute after your module is loaded into memory (but after global variables are initialized, of course.)
 }
 
 
-void FAutomatedBlueprintTests::ShutdownModule()
+void FTestForge::ShutdownModule()
 {
 	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
 	// we call this function before unloading the module.
 }
+
 
 
 

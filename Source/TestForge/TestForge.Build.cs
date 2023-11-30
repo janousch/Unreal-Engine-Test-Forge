@@ -2,9 +2,9 @@
 
 namespace UnrealBuildTool.Rules
 {
-	public class AutomatedBlueprintTests : ModuleRules
+	public class TestForge : ModuleRules
 	{
-		public AutomatedBlueprintTests(ReadOnlyTargetRules Target) : base(Target)
+		public TestForge(ReadOnlyTargetRules Target) : base(Target)
 		{
             PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
@@ -52,3 +52,4 @@ namespace UnrealBuildTool.Rules
 		}
 	}
 }
+

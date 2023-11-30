@@ -5,18 +5,19 @@
 #include <ISettingsModule.h>
 #include <Modules/ModuleManager.h>
 
-#define LOCTEXT_NAMESPACE "AutomatedBlueprintTests"
+#define LOCTEXT_NAMESPACE "TestForge"
 
-IMPLEMENT_MODULE(FAutomatedBlueprintTestsEditor, AutomatedBlueprintTestsEditor)
+IMPLEMENT_MODULE(FTestForgeEditor, TestForgeEditor)
 
-void FAutomatedBlueprintTestsEditor::StartupModule()
+void FTestForgeEditor::StartupModule()
 {
     
 }
 
-void FAutomatedBlueprintTestsEditor::ShutdownModule()
+void FTestForgeEditor::ShutdownModule()
 {
     
 }
 
 #undef LOCTEXT_NAMESPACE
+

@@ -1,30 +1,45 @@
 {
     "FileVersion": 3,
     "Version": 1,
-    "VersionName": "1.2.0",
-    "FriendlyName": "Automated Blueprint Tests",
-    "Description": "Facilitates setting up integration test suites with Gauntlet.",
-    "Category": "Automated Blueprint Tests",
+    "VersionName": "0.0.1",
+    "FriendlyName": "Test Forge",
+    "Description": "Facilitates setting up unit tests, integration test and performance test suites with Gauntlet.",
+    "Category": "Test Forge",
     "CreatedBy": "Ramon Janousch",
     "CreatedByURL": "https://www.RamonJanousch.com/",
-    "DocsURL": "https://github.com/janousch/AutomatedBlueprintTests",
+    "DocsURL": "https://github.com/janousch/TestForge",
     "EngineVersion": "4.27.0",
     "MarketplaceURL": "",
-    "SupportURL": "https://github.com/janousch/AutomatedBlueprintTests/issues",
+    "SupportURL": "https://github.com/janousch/TestForge/issues",
     "EnabledByDefault": false,
     "CanContainContent": true,
     "IsBetaVersion": true,
     "Installed": false,
     "Modules": [
         {
-            "Name": "AutomatedBlueprintTests",
+            "Name": "TestForge",
             "Type": "Runtime",
             "LoadingPhase": "Default"
         },
         {
-            "Name": "AutomatedBlueprintTestsEditor",
+            "Name": "TestForgeEditor",
             "Type": "Editor",
             "LoadingPhase": "PreDefault"
+        },
+        {
+            "Name": "AutomationForgeRuntime",
+            "Type": "Runtime",
+            "LoadingPhase": "Default"
+        },
+        {
+            "Name": "AutomationForgeEditor",
+            "Type": "Editor",
+            "LoadingPhase": "Default"
+        },
+        {
+            "Name": "TestForgeCore",
+            "Type": "Runtime",
+            "LoadingPhase": "Default"
         }
     ],
     "Plugins": [
@@ -34,3 +49,4 @@
         }
     ]
 }
+
