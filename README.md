@@ -1,8 +1,8 @@
-# Automated Blueprint Tests
+# Test Forge
 
-[![license](https://img.shields.io/github/license/janousch/Automated-Blueprint-Tests.svg?maxAge=2592000)](https://github.com/janousch/Automated-Blueprint-Tests/blob/main/LICENSE)
+[![license](https://img.shields.io/github/license/janousch/Unreal-Engine-Test-Forge.svg?maxAge=2592000)](https://github.com/janousch/Unreal-Engine-Test-Forge/blob/main/LICENSE)
 
-The _Automated Blueprint Tests Plugin_ facilitates creating and running unit tests, integration tests and performance tests with the [Gauntlet Automation Framework](https://docs.unrealengine.com/en-US/Programming/Automation/Gauntlet/index.html) of [Unreal Engine](https://www.unrealengine.com).
+The _Test Forge Plugin_ facilitates creating and running unit tests, integration tests and performance tests with the [Gauntlet Automation Framework](https://docs.unrealengine.com/en-US/Programming/Automation/Gauntlet/index.html) of [Unreal Engine](https://www.unrealengine.com).
 
 Automated testing, when applied instead of or in addition to manual testing, provides multiple benefits:
 
@@ -52,7 +52,7 @@ We feel like software testing is far too important not to be supported by automa
 
 ### Prerequisites
 
-Automated Blueprint Tests Plugin currently supports the following Unreal Engine Versions:
+Test Forge Plugin currently supports the following Unreal Engine Versions:
 
 * 4.27
 * 5.0
@@ -66,12 +66,12 @@ If you want to use [Gauntlet](#gauntlet) for running your tests, you'll need a s
 
 ### Adding The Plugin
 
-1. [Clone](https://github.com/janousch/Automated-Blueprint-Tests) the repository or [download](https://github.com/janousch/Automated-Blueprint-Tests/releases) a release.
+1. [Clone](https://github.com/janousch/Unreal-Engine-Test-Forge) the repository or [download](https://github.com/janousch/Unreal-Engine-Test-Forge/releases) a release.
 1. Close the Unreal Editor.
-1. Copy the `AutomatedBlueprintTests` folder to the `Plugins` folder next to your `.uproject` file.
-1. Copy the `AutomatedBlueprintTests.Automation` folder to the `Build/Scripts` folder next to your ```.uproject``` file.
+1. Copy the `TestForge` folder to the `Plugins` folder next to your `.uproject` file.
+1. Copy the `TestForge.Automation` folder to the `Build/Scripts` folder next to your ```.uproject``` file.
 1. Start the Unreal Editor.
-1. Enable the plugin in Edit > Plugins > Automated Blueprint Tests.
+1. Enable the plugin in Edit > Plugins > Test Forge.
 1. Close the Unreal Editor.
 1. Right-click your `.uproject` file and select _Generate Visual Studio project files_.
 1. Build the resulting solution in Visual Studio.
@@ -79,7 +79,7 @@ If you want to use [Gauntlet](#gauntlet) for running your tests, you'll need a s
 
 ## Creating Tests
 
-The Automated Blueprint Tests Plugin is fully exposed to blueprints in order to allow everyone to easily create tests. Each level represents a _test suite_, which in turn can consist of multiple _tests_.
+The Test Forge Plugin is fully exposed to blueprints in order to allow everyone to easily create tests. Each level represents a _test suite_, which in turn can consist of multiple _tests_.
 
 You'll be using Gauntlet to run one or more test suites, or the Unreal Editor to run a single test suite.
 
@@ -94,7 +94,7 @@ In order to create a new test suite with a single test:
 1. Add an instance of the test actor blueprint to the level.
 1. Add the test actor reference to the list of tests of the test suite actor.
 
-Automated tests in the Automated Blueprint Tests Plugin are built with the Arrange-Act-Assert pattern in mind:
+Automated tests in the Test Forge Plugin are built with the Arrange-Act-Assert pattern in mind:
 
 * In _Arrange_, you should set up your test environment, get references to required actors and components, and prepare everything for the actual test.
 * In _Act_, you should perform the actual action to test. Here, you're allowed to use latent actions, such as delays, to test what you want to test. Because we don't know when you're finished, you have to call _Finish Act_ when you're done.
@@ -104,13 +104,13 @@ If any of the assertions performed in the Assert step fail, the test will be mar
 
 ![Simple Test Blueprint](Documentation/SimpleTest.png)
 
-You can verify your test suite by entering PIE and filtering your log by the `LogAbtTest` log category.
+You can verify your test suite by entering PIE and filtering your log by the `LogTestForgeTest` log category.
 
 ```
-LogAbtTest: Display: AAbtTestSuiteActor::RunAllTests - Test Suite: AbtTestSuiteActor_1
-LogAbtTest: Display: AAbtTestSuiteActor::RunNextTest - Test: BP_TestCalculatorAddsNumbers_2
-LogAbtTest: Display: AAbtTestSuiteActor::OnTestSuccessful - Test: BP_TestCalculatorAddsNumbers_2
-LogAbtTest: Display: AAbtTestSuiteActor::RunNextTest - All tests finished.
+LogTestForgeTest: Display: ATestForgeTestSuiteActor::RunAllTests - Test Suite: TestForgeTestSuiteActor_1
+LogTestForgeTest: Display: ATestForgeTestSuiteActor::RunNextTest - Test: BP_TestCalculatorAddsNumbers_2
+LogTestForgeTest: Display: ATestForgeTestSuiteActor::OnTestSuccessful - Test: BP_TestCalculatorAddsNumbers_2
+LogTestForgeTest: Display: ATestForgeTestSuiteActor::RunNextTest - All tests finished.
 ```
 
 You'll also find a handful of example tests in the Content folder of the plugin.
@@ -121,7 +121,7 @@ There's a whole lot of _assertion_ nodes for use in your automated tests, includ
 
 ### Delays
 
-Automated Blueprint Tests Plugin comes with additional _delay_ nodes that you might find useful when building your tests. Take a look at [Documentation/Delays.md](Documentation/Delays.md) for more details.
+Test Forge Plugin comes with additional _delay_ nodes that you might find useful when building your tests. Take a look at [Documentation/Delays.md](Documentation/Delays.md) for more details.
 
 ### Simulating Input
 
@@ -133,7 +133,7 @@ Simulated input is especially helpful when combined with [Delays](#delays):
 
 ### Test Trigger Boxes
 
-Automated Blueprint Tests Plugin ships with a convenience _Test Trigger Box_ that allows you to set up test delays and assertions more quickly. These trigger boxes will just set a flag when triggered, and write a log. Our built-in [delays](Documentation/Delays.md) and [assertions](Documentation/Assertions.md) will use that flag to check if the box has been triggered.
+Test Forge Plugin ships with a convenience _Test Trigger Box_ that allows you to set up test delays and assertions more quickly. These trigger boxes will just set a flag when triggered, and write a log. Our built-in [delays](Documentation/Delays.md) and [assertions](Documentation/Assertions.md) will use that flag to check if the box has been triggered.
 
 ### Test Timeouts
 
@@ -144,12 +144,12 @@ At your _Gauntlet Test Actor_ blueprint (or instance), you can specify a _timeou
 If your test times out during the Act stage, we'll execute all assertions immediately instead of waiting for the Act stage to finish. This allows your test to finish with just warnings instead of errors, in case you just set up some wrong delays, for instance. However, if your assertions actually fail after the timeout, the test will be marked as failed as usual.
 
 ```
-LogAbtTest: Display: AAbtTestSuiteActor::RunAllTests - Test Suite: AbtTestSuiteActor_1
-LogAbtTest: Display: AAbtTestSuiteActor::RunNextTest - Test: BP_TestMoveForward_2
-LogAbtTest: Warning: Timed out after 5.000000 seconds
-LogAbtTest: Error: Assertion failed - Trigger box AbtTestTriggerBox_1 wasn't triggered
-LogAbtTest: Error: AAbtTestSuiteActor::OnTestFailed - Test: BP_TestMoveForward_2, FailureMessage: Assertion failed - Trigger box AbtTestTriggerBox_1 wasn't triggered
-LogAbtTest: Display: AAbtTestSuiteActor::RunNextTest - All tests finished.
+LogTestForgeTest: Display: ATestForgeTestSuiteActor::RunAllTests - Test Suite: TestForgeTestSuiteActor_1
+LogTestForgeTest: Display: ATestForgeTestSuiteActor::RunNextTest - Test: BP_TestMoveForward_2
+LogTestForgeTest: Warning: Timed out after 5.000000 seconds
+LogTestForgeTest: Error: Assertion failed - Trigger box TestForgeTestTriggerBox_1 wasn't triggered
+LogTestForgeTest: Error: ATestForgeTestSuiteActor::OnTestFailed - Test: BP_TestMoveForward_2, FailureMessage: Assertion failed - Trigger box TestForgeTestTriggerBox_1 wasn't triggered
+LogTestForgeTest: Display: ATestForgeTestSuiteActor::RunNextTest - All tests finished.
 ```
 
 ### Test Suite Lifecycle
@@ -167,7 +167,7 @@ After creating your test suite blueprint, you can add instances of that blueprin
 
 ### Parameterized Tests
 
-In case you want to run the same test multiple times with just slightly different configurations, Automated Blueprint Tests Plugin offers _parameterized tests_. You can specify any number of parameters for your test instance (or blueprint).
+In case you want to run the same test multiple times with just slightly different configurations, Test Forge Plugin offers _parameterized tests_. You can specify any number of parameters for your test instance (or blueprint).
 
 In order to provide a consistent test API, these parameters have to be of type UObject, so if you have any other type you want to pass in as parameter, you'll need to wrap them with an UObject. Using UObject parameters also enables you to reference other actors in your test level. We're using soft references to the parameter objects, enabling you to reference actors from other streaming levels as well.
 
@@ -184,17 +184,17 @@ The test will be run once for each parameter, and each test run will be treated 
 * test reports include one test per parameter
 
 ```
-LogAbtTest: Display: AAbtTestSuiteActor::RunAllTests - Test Suite: AbtTestSuiteActor_1
-LogAbtTest: Display: AAbtTestSuiteActor::RunNextTest - Test: BP_TestParameterized_TwoParameters - BP_TestParameter1
+LogTestForgeTest: Display: ATestForgeTestSuiteActor::RunAllTests - Test Suite: TestForgeTestSuiteActor_1
+LogTestForgeTest: Display: ATestForgeTestSuiteActor::RunNextTest - Test: BP_TestParameterized_TwoParameters - BP_TestParameter1
 LogBlueprintUserMessages: [BP_TestParameterized_TwoParameters] BP_TestParameter1
-LogAbtTest: Display: AAbtTestSuiteActor::OnTestSuccessful - Test: BP_TestParameterized_TwoParameters - BP_TestParameter1
-LogAbtTest: Display: AAbtTestSuiteActor::RunNextTest - Test: BP_TestParameterized_TwoParameters - BP_TestParameter2
+LogTestForgeTest: Display: ATestForgeTestSuiteActor::OnTestSuccessful - Test: BP_TestParameterized_TwoParameters - BP_TestParameter1
+LogTestForgeTest: Display: ATestForgeTestSuiteActor::RunNextTest - Test: BP_TestParameterized_TwoParameters - BP_TestParameter2
 LogBlueprintUserMessages: [BP_TestParameterized_TwoParameters] BP_TestParameter2
-LogAbtTest: Display: AAbtTestSuiteActor::OnTestSuccessful - Test: BP_TestParameterized_TwoParameters - BP_TestParameter2
-LogAbtTest: Display: AAbtTestSuiteActor::RunNextTest - All tests finished.
+LogTestForgeTest: Display: ATestForgeTestSuiteActor::OnTestSuccessful - Test: BP_TestParameterized_TwoParameters - BP_TestParameter2
+LogTestForgeTest: Display: ATestForgeTestSuiteActor::RunNextTest - All tests finished.
 ```
 
-Sometimes, you'll want to provide the test parameters dynamically, e.g. when you need to convert them to UObjects. Automated Blueprint Tests Plugin features _Test Parameter Provider Actors_ for this: You can create parameter provider blueprints (e.g. through right-click in Content Browser > Create Advanced Asset > Test Automation > Test Parameter Provider Actor Blueprint). Then, you can override the `GetParameters` function to provide parameters for your test.
+Sometimes, you'll want to provide the test parameters dynamically, e.g. when you need to convert them to UObjects. Test Forge Plugin features _Test Parameter Provider Actors_ for this: You can create parameter provider blueprints (e.g. through right-click in Content Browser > Create Advanced Asset > Test Automation > Test Parameter Provider Actor Blueprint). Then, you can override the `GetParameters` function to provide parameters for your test.
 
 ![Parameter Provider Implementation](Documentation/ParameterProviderImplementation01.png)
 ![Parameter Provider Implementation](Documentation/ParameterProviderImplementation02.png)
@@ -215,10 +215,10 @@ _Test Actor_ blueprint (or instance). Setting the Skip Reason to a non-empty str
 Skipped tests will be marked as neither successful nor failed, and will show up explicitly as skipped in test reports.
 
 ```
-LogAbtTest: Display: AAbtTestSuiteActor::RunAllTests - Test Suite: AbtTestSuiteActor_1
-LogAbtTest: Display: AAbtTestSuiteActor::RunNextTest - Test: BP_TestClimbLedge
-LogAbtTest: Display: AAbtTestSuiteActor::OnTestSkipped - Test: BP_TestClimbLedge, SkipReason: Does not seem to succeed reliably. Occasionally, we fail to get a hold of the ledge after jumping if done automatically by the test.
-LogAbtTest: Display: AAbtTestSuiteActor::RunNextTest - All tests finished.
+LogTestForgeTest: Display: ATestForgeTestSuiteActor::RunAllTests - Test Suite: TestForgeTestSuiteActor_1
+LogTestForgeTest: Display: ATestForgeTestSuiteActor::RunNextTest - Test: BP_TestClimbLedge
+LogTestForgeTest: Display: ATestForgeTestSuiteActor::OnTestSkipped - Test: BP_TestClimbLedge, SkipReason: Does not seem to succeed reliably. Occasionally, we fail to get a hold of the ledge after jumping if done automatically by the test.
+LogTestForgeTest: Display: ATestForgeTestSuiteActor::RunNextTest - All tests finished.
 ```
 
 ### Assumptions
@@ -230,15 +230,15 @@ You can also specify dynamic conditions for skipping a test through _assumptions
 If any of your assumptions fail, the test will be skipped instead of being marked as failure:
 
 ```
-LogAbtTest: Display: AAbtTestSuiteActor::RunAllTests - Test Suite: AbtTestSuiteActor_1
-LogAbtTest: Display: AAbtTestSuiteActor::RunNextTest - Test: BP_TestAssume_2
-LogAbtTest: Display: AAbtTestSuiteActor::OnTestSkipped - Test: BP_TestAssume_2, SkipReason: Assumption failed - Running on XboxOne - Expected: True, but was: False
-LogAbtTest: Display: AAbtTestSuiteActor::RunNextTest - All tests finished.
+LogTestForgeTest: Display: ATestForgeTestSuiteActor::RunAllTests - Test Suite: TestForgeTestSuiteActor_1
+LogTestForgeTest: Display: ATestForgeTestSuiteActor::RunNextTest - Test: BP_TestAssume_2
+LogTestForgeTest: Display: ATestForgeTestSuiteActor::OnTestSkipped - Test: BP_TestAssume_2, SkipReason: Assumption failed - Running on XboxOne - Expected: True, but was: False
+LogTestForgeTest: Display: ATestForgeTestSuiteActor::RunNextTest - All tests finished.
 ```
 
 ### Performance Tests
 
-Automated Blueprint Tests Plugin provides built-in performance testing. You can add an instance of an `AAbtTestPerformanceBudgetActor` to any of your test suites (even without the need to create a blueprint for that test). For that actor, you'll need to specify at least two parameters:
+Test Forge Plugin provides built-in performance testing. You can add an instance of an `ATestForgeTestPerformanceBudgetActor` to any of your test suites (even without the need to create a blueprint for that test). For that actor, you'll need to specify at least two parameters:
 
 First, place a few _target points_ in your level, and add them to the _Flight Path_ of your performance budget actor. Second, specify the _Pawn Class_ to follow that flight path (e.g. a default pawn with camera and without collision).
 
@@ -263,11 +263,11 @@ You can run each test suite by just entering _Play In Editor_, if "Run in PIE" i
 
 ### Automation Window
 
-In order for the plugin to pick up your tests, specify your test map folders in Edit > Project Settings > Plugins > Automated Blueprint Tests.
+In order for the plugin to pick up your tests, specify your test map folders in Edit > Project Settings > Plugins > Test Forge.
 
 ![Test Map Folders Settings](Documentation/SettingsTestMaps.png)
 
-Then, you can use the _Automation window_ of the session frontend of the Unreal Editor (Window > Test Automation) to run multiple tests. Your tests will be shown under the category AutomatedBlueprintTests:
+Then, you can use the _Automation window_ of the session frontend of the Unreal Editor (Window > Test Automation) to run multiple tests. Your tests will be shown under the category TestForge:
 
 ![Automation Window](Documentation/AutomationWindow.png)
 
@@ -283,7 +283,7 @@ Set the `UNREAL_ENGINE_4_PATH` environment variable to the root folder of your s
 
 Note that you might need to restart your shells and/or Visual Studio in order to have your changes take effect.
 
-If everything is set up correctly, `AutomatedBlueprintTests.Automation` will be discovered when generating your project files (because the engine finds it in your Build directory). The project will then use your environment variable to publish its build results to the `Engine\Binaries\DotNET\AutomationScripts` folder your engine, where they can be discovered by the Unreal Automation Tool for running Gauntlet.
+If everything is set up correctly, `TestForge.Automation` will be discovered when generating your project files (because the engine finds it in your Build directory). The project will then use your environment variable to publish its build results to the `Engine\Binaries\DotNET\AutomationScripts` folder your engine, where they can be discovered by the Unreal Automation Tool for running Gauntlet.
 
 Now, here's an example command line to get started:
 
@@ -295,7 +295,7 @@ RunUnreal
 -platform=Win64
 -configuration=Development
 -build=editor
--test="AutomatedBlueprintTests.Automation.AbtGauntletTest"
+-test="TestForge.Automation.TestForgeGauntletTest"
 ```
 
 In the command line above:
@@ -303,7 +303,7 @@ In the command line above:
 * `RunUAT.bat` starts the Unreal Automation Tool (UAT).
 * `RunUnreal` tells the UAT to run Gauntlet.
 * `-project` specifies the full path to your Unreal project file.
-* `-scriptdir` tells UAT to compile and load your UAT extensions (in this case, at least `AutomatedBlueprintTests.Automation`).
+* `-scriptdir` tells UAT to compile and load your UAT extensions (in this case, at least `TestForge.Automation`).
 * `-build` tells Gauntlet to use your editor project instead of a packaged build.
 * `-test` tells Gauntlet to use our custom controller (which in turn runs the test suites).
 
@@ -312,7 +312,7 @@ This will run all tests the plugin finds in your Test Map Path (see [Automation 
 Because documentation on Gauntlet is still sparse, you occasionally might want to check back on the original source files to learn about supported parameters and internal workings:
 
 * `Gauntlet.UnrealBuildSource.ResolveBuildReference` will tell you more about valid options for the `-build` parameter (e.g. running a staged build)
-* `EpicGame.EpicGameTestConfig` (and its base classes) is used by our `AutomatedBlueprintTests.Automation.AbtTestConfig` and can tell you more about valid options for the `-test` parameter.
+* `EpicGame.EpicGameTestConfig` (and its base classes) is used by our `TestForge.Automation.TestForgeTestConfig` and can tell you more about valid options for the `-test` parameter.
 * `Gauntlet.ArgumentWithParams.CreateFromString` is used for actually parsing the `-test` parameter.
 
 You can also specify additional parameters along with the `test` parameter for the test run:
@@ -331,7 +331,7 @@ RunUnreal
 -platform=Win64
 -configuration=Development
 -build=editor
--test="AutomatedBlueprintTests.Automation.AbtGauntletTest(JUnitReportPath=C:\Projects\UnrealGame\Saved\Reports\junit-report.xml,ReportPath=C:\Projects\UnrealGame\Saved\Reports)"
+-test="TestForge.Automation.TestForgeGauntletTest(JUnitReportPath=C:\Projects\UnrealGame\Saved\Reports\junit-report.xml,ReportPath=C:\Projects\UnrealGame\Saved\Reports)"
 ```
 
 
@@ -341,7 +341,7 @@ RunUnreal
 
 Sometimes, you'll want to use a special configuration for running your tests. For instance, for Gollum, we needed to disable playing the intro sequences of levels to test the performance of.
 
-In Edit > Project Settings > Plugins > Automated Blueprint Tests Plugin, you can specify console variables to be set before running batches of tests (e.g. through the automation window or Gauntlet). When using the automation window, the original values of these console variables will be stored before and restored after each test has run. For Gauntlet, this isn't necessary, as console variables have session scope.
+In Edit > Project Settings > Plugins > Test Forge Plugin, you can specify console variables to be set before running batches of tests (e.g. through the automation window or Gauntlet). When using the automation window, the original values of these console variables will be stored before and restored after each test has run. For Gauntlet, this isn't necessary, as console variables have session scope.
 
 ![Console Variables Settings](Documentation/SettingsConsoleVariables.png)
 
@@ -352,7 +352,7 @@ Note that these console variables won't be applied when running tests directly i
 
 ### JUnit Test Reports
 
-When running tests through Gauntlet, Automated Blueprint Tests Plugin can generate test reports to publish with your CI/CD pipeline.
+When running tests through Gauntlet, Test Forge Plugin can generate test reports to publish with your CI/CD pipeline.
 
 When generating _JUnit reports_ (by specifying the `JUnitReportPath` for [Gauntlet](#gauntlet)), the plugin uses a standardized format based on `org.junit.platform.reporting.legacy.xml.XmlReportWriter.writeTestsuite`, allowing you to publish the report just as you would when using JUnit. Here's an example of how the results look like when published with [Jenkins](https://www.jenkins.io/):
 
@@ -362,17 +362,17 @@ Test reports will be (over-)written after each individual test, to ensure to be 
 
 ### Custom Test Reports
 
-When building your own tests, you can also have the plugin write _custom reports_. This isn't exposed to blueprints, so you'll have to extend `AAbtTestActor` in C++. 
+When building your own tests, you can also have the plugin write _custom reports_. This isn't exposed to blueprints, so you'll have to extend `ATestForgeTestActor` in C++. 
 
 In addition to implementing `NotifyOnArrange`, `ReceiveOnAct_Implementation` and `NotifyOnAssert` as you like, you'll have to implement two methods for generating your custom reports:
 
 First, `CollectResults` should return a shared pointer to custom test result data you want to publish in your reports. This data will be stored along with the default result data the plugin collects for all tests. Here's an example from our performance test implementation:
 
 ```
-TSharedPtr<FAbtTestResultData> AAbtTestPerformanceBudgetActor::CollectResults() const
+TSharedPtr<FTestForgeTestResultData> ATestForgeTestPerformanceBudgetActor::CollectResults() const
 {
-    TSharedPtr<FAbtTestPerformanceBudgetResultData> Results =
-        MakeShareable(new FAbtTestPerformanceBudgetResultData());
+    TSharedPtr<FTestForgeTestPerformanceBudgetResultData> Results =
+        MakeShareable(new FTestForgeTestPerformanceBudgetResultData());
 
     Results->BudgetViolations = BudgetViolations;
 
@@ -380,34 +380,34 @@ TSharedPtr<FAbtTestResultData> AAbtTestPerformanceBudgetActor::CollectResults() 
 }
 ```
 
-Your custom result data class needs to extend `FAbtTestResultData` and implement `GetDataType`. As test results are no `UObject`s, the plugin uses this method for allowing you to safely type-cast your result data in your custom report writers:
+Your custom result data class needs to extend `FTestForgeTestResultData` and implement `GetDataType`. As test results are no `UObject`s, the plugin uses this method for allowing you to safely type-cast your result data in your custom report writers:
 
 ```
-FName FAbtTestPerformanceBudgetResultData::GetDataType() const
+FName FTestForgeTestPerformanceBudgetResultData::GetDataType() const
 {
-    return TEXT("FAbtTestPerformanceBudgetResultData");
+    return TEXT("FTestForgeTestPerformanceBudgetResultData");
 }
 ```
 
 Second, `GetReportWriters` should return a set of report writers that are supposed to write reports for your test. The plugin will call that method for each individual test and merge the results, avoiding duplicate report writers. In the example of our performance testing, we're allowing the user to specify whether they want to include the test in the default JUnit report as well:
 
 ```
-FAbtTestReportWriterSet AAbtTestPerformanceBudgetActor::GetReportWriters() const
+FTestForgeTestReportWriterSet ATestForgeTestPerformanceBudgetActor::GetReportWriters() const
 {
-    FAbtTestReportWriterSet ReportWriters;
+    FTestForgeTestReportWriterSet ReportWriters;
 
     if (bIncludeInDefaultTestReport)
     {
-        FAbtTestReportWriterSet DefaultReportWriters = Super::GetReportWriters();
+        FTestForgeTestReportWriterSet DefaultReportWriters = Super::GetReportWriters();
         ReportWriters.Add(DefaultReportWriters);
     }
 
-    ReportWriters.Add(MakeShareable(new FAbtTestReportWriterPerformance()));
+    ReportWriters.Add(MakeShareable(new FTestForgeTestReportWriterPerformance()));
     return ReportWriters;
 }
 ```
 
-Your own report writer needs to extend `FAbtTestReportWriter` and implement two methods again: `GetReportType` is used for comparing the types of report writers, as we aren't using `UObjects` here again. `WriteReport` is supposed to actually write your report data to disk. Basically, you're allowed to do anything you want here, but usually, this includes the following steps:
+Your own report writer needs to extend `FTestForgeTestReportWriter` and implement two methods again: `GetReportType` is used for comparing the types of report writers, as we aren't using `UObjects` here again. `WriteReport` is supposed to actually write your report data to disk. Basically, you're allowed to do anything you want here, but usually, this includes the following steps:
 
 1. Use `IPlatformFile` to ensure that the path to write your reports to exists.
 1. Iterate over all test suites and their respective results to collect your report data.
@@ -416,15 +416,15 @@ Your own report writer needs to extend `FAbtTestReportWriter` and implement two 
 Again, here's an example from our performance report writer for collecting report data:
 
 ```
-for (const FAbtTestSuiteResult& TestSuiteResult : TestSuites)
+for (const FTestForgeTestSuiteResult& TestSuiteResult : TestSuites)
 {
-    for (const FAbtTestResult& TestResult : TestSuiteResult.TestResults)
+    for (const FTestForgeTestResult& TestResult : TestSuiteResult.TestResults)
     {
         if (TestResult.Data != nullptr
-            && TestResult.Data->GetDataType() == TEXT("FAbtTestPerformanceBudgetResultData"))
+            && TestResult.Data->GetDataType() == TEXT("FTestForgeTestPerformanceBudgetResultData"))
         {
-            TSharedPtr<FAbtTestPerformanceBudgetResultData> Data =
-                StaticCastSharedPtr<FAbtTestPerformanceBudgetResultData>(TestResult.Data);
+            TSharedPtr<FTestForgeTestPerformanceBudgetResultData> Data =
+                StaticCastSharedPtr<FTestForgeTestPerformanceBudgetResultData>(TestResult.Data);
 
             // ...
         }
@@ -446,7 +446,7 @@ There are a few best practices we learned when writing tests, and we want to sha
 
 ## Bugs, Questions & Feature Requests
 
-Automated Blueprint Tests Plugin is still under heavy development. Whenever you're experiencing issues, missing a feature, or you just don't understand a part of the plugin, after verifying that you are using the [latest version](https://github.com/janousch/Automated-Blueprint-Tests/releases) and having checked whether a [similar issue](https://github.com/janousch/Automated-Blueprint-Tests/issues) has already been reported, feel free to [open a new issue](https://github.com/janousch/Automated-Blueprint-Tests/issues/new). In order to help us resolving your problem as fast as possible, please include the following details in your report:
+Test Forge Plugin is still under heavy development. Whenever you're experiencing issues, missing a feature, or you just don't understand a part of the plugin, after verifying that you are using the [latest version](https://github.com/janousch/Unreal-Engine-Test-Forge/releases) and having checked whether a [similar issue](https://github.com/janousch/Unreal-Engine-Test-Forge/issues) has already been reported, feel free to [open a new issue](https://github.com/janousch/Unreal-Engine-Test-Forge/issues/new). In order to help us resolving your problem as fast as possible, please include the following details in your report:
 
 * Steps to reproduce
 * What happened?
@@ -466,22 +466,22 @@ We know that using this plugin in production requires you to be completely sure 
 
 You'll always find all available releases and their respective release notes at:
 
-https://github.com/janousch/Automated-Blueprint-Tests/releases
+https://github.com/janousch/Unreal-Engine-Test-Forge/releases
 
 
 ## Contributing
 
-You want to contribute to Automated Blueprint Tests Plugin? Great! Take a look at [Contributing](CONTRIBUTING.md) to get started right away!
+You want to contribute to Test Forge Plugin? Great! Take a look at [Contributing](CONTRIBUTING.md) to get started right away!
 
 
 ## Future Work
 
-While the plugin already serves as solid base for creating automated tests, there's still a lot of things we'd like to add in the future. If you're interested in more details, take a look at the [GitHub milestones](https://github.com/janousch/Automated-Blueprint-Tests/milestones).
+While the plugin already serves as solid base for creating automated tests, there's still a lot of things we'd like to add in the future. If you're interested in more details, take a look at the [GitHub milestones](https://github.com/janousch/Unreal-Engine-Test-Forge/milestones).
 
 
 ## License
 
-Automated Blueprint Tests Plugin is released under the [MIT License](https://github.com/janousch/Automated-Blueprint-Tests/blob/develop/LICENSE).
+Test Forge Plugin is released under the [MIT License](https://github.com/janousch/Unreal-Engine-Test-Forge/blob/develop/LICENSE).
 
 
 ## References
