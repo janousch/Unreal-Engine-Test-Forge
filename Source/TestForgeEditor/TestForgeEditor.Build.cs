@@ -23,11 +23,11 @@ namespace UnrealBuildTool.Rules
 			PublicDependencyModuleNames.AddRange(
 				new string[]
 				{
-					"Core",
-                    "CoreUObject",
-                    "Engine",
-                    "TestForge",
-                    "UnrealEd",
+					//"Core",
+                    //"CoreUObject",
+                    //"Engine",
+                    //"TestForge",
+                    //"UnrealEd",
                     //"BlueprintGraph",
                     //"AssetTools"
                 }

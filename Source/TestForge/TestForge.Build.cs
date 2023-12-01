@@ -25,14 +25,15 @@ namespace UnrealBuildTool.Rules
 				{
 					"Core",
                     "CoreUObject",
-                    "Engine",
-                    "InputCore",
-                    "Gauntlet",
-                    "UMG",
-                    "SlateCore",
-                    "Slate",
-                    "RenderCore",
-                    "Projects"
+                    //"Engine",
+                    //"InputCore",
+                    //"Gauntlet",
+                    //"UMG",
+                    //"SlateCore",
+                    //"Slate",
+                    //"RenderCore",
+                    //"Projects",
+					//TestForgeCore
                 }
 				);
 

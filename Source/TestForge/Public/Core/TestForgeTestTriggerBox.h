@@ -1,30 +1,30 @@
-#pragma once
-
-#include <CoreMinimal.h>
-#include <Engine/TriggerBox.h>
-#include "TestForgeTestTriggerBox.generated.h"
-
-/** Trigger box to be used in automated tests. */
-UCLASS()
-class TESTFORGE_API ATestForgeTestTriggerBox : public ATriggerBox
-{
-    GENERATED_BODY()
-
-public:
-    virtual void BeginPlay() override;
-
-    /** Whether this trigger box has been triggered at least once. */
-    UFUNCTION(BlueprintPure)
-    bool WasTriggered() const;
-
-    UFUNCTION(BlueprintCallable)
-    void ResetTriggerState();
-
-private:
-    /** Whether this trigger box has been triggered at least once. */
-    bool bWasTriggered;
-
-    UFUNCTION()
-    void OnActorBeginOverlapBroadcast(AActor* OverlappedActor, AActor* OtherActor);
-};
-
+//#pragma once
+//
+//#include <CoreMinimal.h>
+//#include <Engine/TriggerBox.h>
+//#include "TestForgeTestTriggerBox.generated.h"
+//
+///** Trigger box to be used in automated tests. */
+//UCLASS()
+//class TESTFORGE_API ATestForgeTestTriggerBox : public ATriggerBox
+//{
+//    GENERATED_BODY()
+//
+//public:
+//    virtual void BeginPlay() override;
+//
+//    /** Whether this trigger box has been triggered at least once. */
+//    UFUNCTION(BlueprintPure)
+//    bool WasTriggered() const;
+//
+//    UFUNCTION(BlueprintCallable)
+//    void ResetTriggerState();
+//
+//private:
+//    /** Whether this trigger box has been triggered at least once. */
+//    bool bWasTriggered;
+//
+//    UFUNCTION()
+//    void OnActorBeginOverlapBroadcast(AActor* OverlappedActor, AActor* OtherActor);
+//};
+//

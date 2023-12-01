@@ -1,90 +1,90 @@
-#pragma once
-
-#include "TestForgeTestActor.h"
-#include "TestForgeTestPerformanceBudgetViolation.h"
-#include <CoreMinimal.h>
-#include <GameFramework/Pawn.h>
-#include "TestForgeTestPerformanceBudgetActor.generated.h"
-
-class ATargetPoint;
-class UAutomationPerformaceHelper;
-
-/** Actor that spawns a DefaultPawn to fly along a pre-defined path through the level and monitor performance. */
-UCLASS()
-class TESTFORGE_API ATestForgeTestPerformanceBudgetActor : public ATestForgeTestActor
-{
-    GENERATED_BODY()
-
-public:
-    ATestForgeTestPerformanceBudgetActor(
-        const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
-
-    virtual void BeginPlay() override;
-
-    virtual void NotifyOnArrange(UObject* Parameter) override;
-    virtual void ReceiveOnAct_Implementation(UObject* Parameter) override;
-    virtual void NotifyOnAssert(UObject* Parameter) override;
-
-    virtual void Tick(float DeltaSeconds) override;
-
-    virtual TSharedPtr<FTestForgeTestResultData> CollectResults() const;
-    virtual FTestForgeTestReportWriterSet GetReportWriters() const;
-
-private:
-    /** Targets points to fly through, in order. */
-    UPROPERTY(EditInstanceOnly)
-    TArray<ATargetPoint*> FlightPath;
-
-    /** Pawn to use for flying through the level. */
-    UPROPERTY(EditAnywhere)
-    TSubclassOf<APawn> PawnClass;
-
-    /** Interpolates pawn rotation between current/next target point rotation when true
-        otherwise pawn faces the direction of movement */
-    UPROPERTY(EditAnywhere)
-    bool bUseTargetRotation;
-
-    /** How long to wait before starting to fly, in seconds. */
-    UPROPERTY(EditAnywhere)
-    float InitialDelay;
-
-    /** How fast to fly, in cm/s. */
-    UPROPERTY(EditAnywhere)
-    float FlightSpeed;
-
-    /** Radius around flight path points to consider the point as reached, in cm. */
-    UPROPERTY(EditAnywhere)
-    float AcceptanceRadius;
-
-    /** How long to wait before starting to measure again after a budget violation, in seconds. */
-    UPROPERTY(EditAnywhere)
-    float BudgetViolationTimeout;
-
-    /** How long game thread is allowed to take for a single frame, in ms. */
-    UPROPERTY(EditAnywhere)
-    float GameThreadBudget;
-
-    /** How long draw is allowed to take for a single frame, in ms. */
-    UPROPERTY(EditAnywhere)
-    float RenderThreadBudget;
-
-    /** How long GPU is allowed to take for a single frame, in ms. */
-    UPROPERTY(EditAnywhere)
-    float GPUBudget;
-
-    /** Whether performance budget violations should cause a failure item in default test reports. */
-    UPROPERTY(EditAnywhere)
-    bool bIncludeInDefaultTestReport;
-
-    bool bIsRunning;
-    bool bIsRecording;
-
-    int32 CurrentTargetPointIndex;
-    TArray<FTestForgeTestPerformanceBudgetViolation> BudgetViolations;
-    float LastBudgetViolationTime;
-
-    void BeginRecording();
-    void EndRecording();
-    bool ValidatePerformanceCounter(float Time, float Budget, const FString& Name);
-};
-
+//#pragma once
+//
+//#include "TestForgeTestActor.h"
+//#include "TestForgeTestPerformanceBudgetViolation.h"
+//#include <CoreMinimal.h>
+//#include <GameFramework/Pawn.h>
+//#include "TestForgeTestPerformanceBudgetActor.generated.h"
+//
+////class ATargetPoint;
+//class UAutomationPerformaceHelper;
+//
+///** Actor that spawns a DefaultPawn to fly along a pre-defined path through the level and monitor performance. */
+//UCLASS()
+//class TESTFORGE_API ATestForgeLevelPerformanceTestActor : public ATestForgeTestActor
+//{
+//    GENERATED_BODY()
+//
+//public:
+//    ATestForgeLevelPerformanceTestActor(
+//        const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+//
+//    virtual void BeginPlay() override;
+//
+//    virtual void NotifyOnArrange(UObject* Parameter) override;
+//    virtual void ReceiveOnAct_Implementation(UObject* Parameter) override;
+//    virtual void NotifyOnAssert(UObject* Parameter) override;
+//
+//    virtual void Tick(float DeltaSeconds) override;
+//
+//    virtual TSharedPtr<FTestForgeTestResultData> CollectResults() const;
+//    virtual FTestForgeTestReportWriterSet GetReportWriters() const;
+//
+//private:
+//    /** Targets points to fly through, in order. */
+//    /*UPROPERTY(EditInstanceOnly)
+//    TArray<ATargetPoint*> FlightPath;*/
+//
+//    /** Pawn to use for flying through the level. */
+//    UPROPERTY(EditAnywhere)
+//    TSubclassOf<APawn> PawnClass;
+//
+//    /** Interpolates pawn rotation between current/next target point rotation when true
+//        otherwise pawn faces the direction of movement */
+//    /*UPROPERTY(EditAnywhere)
+//    bool bUseTargetRotation;*/
+//
+//    /** How long to wait before starting to fly, in seconds. */
+//    UPROPERTY(EditAnywhere)
+//    float InitialDelay;
+//
+//    /** How fast to fly, in cm/s. */
+//    /*UPROPERTY(EditAnywhere)
+//    float FlightSpeed;*/
+//
+//    /** Radius around flight path points to consider the point as reached, in cm. */
+//    /*UPROPERTY(EditAnywhere)
+//    float AcceptanceRadius;*/
+//
+//    /** How long to wait before starting to measure again after a budget violation, in seconds. */
+//    UPROPERTY(EditAnywhere)
+//    float BudgetViolationTimeout;
+//
+//    /** How long game thread is allowed to take for a single frame, in ms. */
+//    UPROPERTY(EditAnywhere)
+//    float GameThreadBudget;
+//
+//    /** How long draw is allowed to take for a single frame, in ms. */
+//    UPROPERTY(EditAnywhere)
+//    float RenderThreadBudget;
+//
+//    /** How long GPU is allowed to take for a single frame, in ms. */
+//    UPROPERTY(EditAnywhere)
+//    float GPUBudget;
+//
+//    /** Whether performance budget violations should cause a failure item in default test reports. */
+//    UPROPERTY(EditAnywhere)
+//    bool bIncludeInDefaultTestReport;
+//
+//    bool bIsRunning;
+//    bool bIsRecording;
+//
+//    //int32 CurrentTargetPointIndex;
+//    TArray<FTestForgeTestPerformanceBudgetViolation> BudgetViolations;
+//    float LastBudgetViolationTime;
+//
+//    void BeginRecording();
+//    void EndRecording();
+//    bool ValidatePerformanceCounter(float Time, float Budget, const FString& Name);
+//};
+//
