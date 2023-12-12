@@ -1,21 +1,21 @@
-//#include "TestForgeTestSuiteActor.h"
+// Copyright 2023 Ramon Janousch. All Rights Reserved.
+
+#include "TestForge/Public/Execution/TestForgeTestSuiteActor.h"
 //#include "TestForgeTestActor.h"
 //#include "TestForgeTestLogCategory.h"
 //#include "TestForgeTestReportWriter.h"
 //#include <Engine/World.h>
-//
-//ATestForgeTestSuiteActor::ATestForgeTestSuiteActor(
-//    const FObjectInitializer& ObjectInitializer /*= FObjectInitializer::Get()*/)
-//{
-//    bRunInPIE = true;
-//    TestIndex = -1;
-//
-//    PrimaryActorTick.bCanEverTick = true;
-//
-//    // We need to be able to time out even while gameplay is paused.
-//    PrimaryActorTick.bTickEvenWhenPaused = true;
-//}
-//
+
+ATestForgeTestSuiteActor::ATestForgeTestSuiteActor()
+{
+    PrimaryActorTick.bCanEverTick = true;
+    // We need to be able to time out even while gameplay is paused.
+    PrimaryActorTick.bTickEvenWhenPaused = true;
+
+    //    bRunInPIE = true;
+    //    TestIndex = -1;
+}
+
 //void ATestForgeTestSuiteActor::BeginPlay()
 //{
 //    Super::BeginPlay();
@@ -330,4 +330,4 @@
 //    // Run next test.
 //    RunNextTest();
 //}
-//
+

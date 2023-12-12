@@ -14,8 +14,6 @@ class FTestForgeCore : public ITestForgeCore
 
 IMPLEMENT_MODULE( FTestForgeCore, TestForgeCore )
 
-
-
 void FTestForgeCore::StartupModule()
 {
 	// This code will execute after your module is loaded into memory (but after global variables are initialized, of course.)

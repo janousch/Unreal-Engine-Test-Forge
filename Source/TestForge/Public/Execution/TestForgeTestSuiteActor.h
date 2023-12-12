@@ -1,27 +1,29 @@
-//#pragma once
-//
+// Copyright 2023 Ramon Janousch. All Rights Reserved.
+
+#pragma once
+
 //#include "TestForgeTestReportWriterSet.h"
 //#include "TestForgeTestSuiteResult.h"
-//#include <CoreMinimal.h>
-//#include <GameFramework/Actor.h>
-//#include "TestForgeTestSuiteActor.generated.h"
-//
+#include <CoreMinimal.h>
+#include <GameFramework/Actor.h>
+#include "TestForgeTestSuiteActor.generated.h"
+
 //class ATestForgeTestActor;
-//
+
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTestForgeTestSuiteActorTestSuiteSuccessfulSignature,
 //                                            ATestForgeTestSuiteActor*, TestSuite);
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTestForgeTestSuiteActorTestSuiteFailedSignature,
 //                                            ATestForgeTestSuiteActor*, TestSuite);
-//
-///** Collection of automated tests. */
-//UCLASS()
-//class TESTFORGE_API ATestForgeTestSuiteActor : public AActor
-//{
-//    GENERATED_BODY()
-//
-//public:
-//    ATestForgeTestSuiteActor(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
-//
+
+/** Collection of automated tests. */
+UCLASS()
+class TESTFORGE_API ATestForgeTestSuiteActor : public AActor
+{
+    GENERATED_BODY()
+
+public:
+    ATestForgeTestSuiteActor();
+
 //    virtual void BeginPlay() override;
 //    virtual void Tick(float DeltaSeconds) override;
 //
@@ -112,5 +114,5 @@
 //
 //    UFUNCTION()
 //    void OnTestSkipped(ATestForgeTestActor* Test, UObject* Parameter, const FString& SkipReason);
-//};
-//
+};
+

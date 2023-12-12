@@ -2,27 +2,27 @@
 
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
-#include "IAutomationForgeBuildPipeline.h"
+#include "IAutomationForgeRuntime.h"
 
 
-class FAutomationForgeBuildPipeline : public IAutomationForgeBuildPipeline
+class FAutomationForgeRuntime : public IAutomationForgeRuntime
 {
 	/** IModuleInterface implementation */
 	virtual void StartupModule() override;
 	virtual void ShutdownModule() override;
 };
 
-IMPLEMENT_MODULE( FAutomationForgeBuildPipeline, AutomationForgeBuildPipeline )
+IMPLEMENT_MODULE( FAutomationForgeRuntime, AutomationForgeRuntime )
 
 
 
-void FAutomationForgeBuildPipeline::StartupModule()
+void FAutomationForgeRuntime::StartupModule()
 {
 	// This code will execute after your module is loaded into memory (but after global variables are initialized, of course.)
 }
 
 
-void FAutomationForgeBuildPipeline::ShutdownModule()
+void FAutomationForgeRuntime::ShutdownModule()
 {
 	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
 	// we call this function before unloading the module.
