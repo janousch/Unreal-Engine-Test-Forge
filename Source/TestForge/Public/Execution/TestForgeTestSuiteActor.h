@@ -8,7 +8,7 @@
 #include <GameFramework/Actor.h>
 #include "TestForgeTestSuiteActor.generated.h"
 
-//class ATestForgeTestActor;
+class ATestForgeTestActor;
 
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTestForgeTestSuiteActorTestSuiteSuccessfulSignature,
 //                                            ATestForgeTestSuiteActor*, TestSuite);
@@ -25,23 +25,23 @@ public:
     ATestForgeTestSuiteActor();
 
 //    virtual void BeginPlay() override;
-//    virtual void Tick(float DeltaSeconds) override;
-//
-//    /** Runs all tests of this suite, in order. */
-//    void RunAllTests();
-//
-//    /** Whether this test suite is currently running. */
-//    bool IsRunning() const;
-//
-//    /** Gets the test that is currently running. */
-//    ATestForgeTestActor* GetCurrentTest() const;
-//
-//    /** Gets the parameter for the current test run. */
-//    UObject* GetCurrentTestParameter() const;
-//
-//    /** Gets the name of the current test. */
-//    FString GetCurrentTestName() const;
-//
+    virtual void Tick(float DeltaSeconds) override;
+
+    /** Runs all tests of this suite, in order. */
+    void RunAllTests();
+
+    /** Whether this test suite is currently running. */
+    bool IsRunning() const;
+
+    /** Gets the test that is currently running. */
+    ATestForgeTestActor* GetCurrentTest() const;
+
+    /** Gets the parameter for the current test run. */
+    UObject* GetCurrentTestParameter() const;
+
+    /** Gets the name of the current test. */
+    FString GetCurrentTestName() const;
+
 //    /** Results of the whole test suite. */
 //    const FTestForgeTestSuiteResult& GetResult() const;
 //
@@ -81,31 +81,31 @@ public:
 //
 //    /** Event when any tests of this test suite have failed. */
 //    FTestForgeTestSuiteActorTestSuiteFailedSignature OnTestSuiteFailed;
-//
-//private:
-//    /** Tests to run in this level. */
-//    UPROPERTY(EditInstanceOnly)
-//    TArray<ATestForgeTestActor*> Tests;
-//
+
+private:
+    /** Tests to run in this level. */
+    UPROPERTY(EditInstanceOnly)
+    TArray<ATestForgeTestActor*> Tests;
+
 //    /** Whether to automatically run this test suite on BeginPlay in Play In Editor. */
 //    UPROPERTY(EditInstanceOnly)
 //    bool bRunInPIE;
-//
-//    /** Index of the current test. */
-//    int32 TestIndex;
-//
-//    /** Index of the current parameter the current test is run with. */
-//    int32 TestParameterIndex;
-//
-//    /** Time the current test has been running, in seconds. */
-//    float TestTimeSeconds;
-//
+
+    /** Index of the current test. */
+    int32 TestIndex;
+
+    /** Index of the current parameter the current test is run with. */
+    int32 TestParameterIndex;
+
+    /** Time the current test has been running, in seconds. */
+    float TestTimeSeconds;
+
 //    /** Results of the whole test suite. */
 //    FTestForgeTestSuiteResult Result;
-//
-//    /** Runs the next test in this test suite. */
-//    void RunNextTest();
-//
+
+    /** Runs the next test in this test suite. */
+    void RunNextTest();
+
 //    UFUNCTION()
 //    void OnTestSuccessful(ATestForgeTestActor* Test, UObject* Parameter);
 //

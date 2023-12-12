@@ -1,24 +1,24 @@
-//#include "TestForgeTestActor.h"
+// Copyright 2023 Ramon Janousch. All Rights Reserved.
+
+#include "Core/TestForgeTestActor.h"
 //#include "RecordedInput/TestForgeTestRecordingComponent.h"
 //#include "RecordedInput/TestForgeTestReplayComponent.h"
 //#include "TestForgeTestAssertBlueprintFunctionLibrary.h"
-//#include "TestForgeTestLogCategory.h"
+#include "Core/TestForgeLogCategory.h"
 //#include "TestForgeTestParameterProviderActor.h"
 //#include "TestForgeTestReportWriterJUnit.h"
 //#include "TestForgeTestResult.h"
 //#include "Settings/TestForgeTestAutomationPluginSettings.h"
-//
-//ATestForgeTestActor::ATestForgeTestActor(
-//    const FObjectInitializer& ObjectInitializer /*= FObjectInitializer::Get()*/)
-//    : Super(ObjectInitializer)
-//{
-//    TimeoutInSeconds = 30.0f;
-//
+
+ATestForgeTestActor::ATestForgeTestActor()
+{
+    TimeoutInSeconds = 30.0f;
+
 //    RecordingComponent =
 //        CreateDefaultSubobject<UTestForgeTestRecordingComponent>(TEXT("RecordingComponent"));
 //    ReplayComponent = CreateDefaultSubobject<UTestForgeTestReplayComponent>(TEXT("ReplayComponent"));
-//}
-//
+}
+
 //void ATestForgeTestActor::ApplyParameterProviders()
 //{
 //    for (int32 Index = 0; Index < ParameterProviders.Num(); ++Index)
@@ -44,31 +44,31 @@
 //               *GetName(), AdditionalParameters.Num(), *Provider->GetName());
 //    }
 //}
-//
-//void ATestForgeTestActor::RunTest(UObject* TestParameter)
-//{
-//    CurrentParameter = TestParameter;
-//    bHasResult = false;
-//    bHadTimeout = false;
-//
-//    if (!SkipReason.IsEmpty())
-//    {
-//        NotifyOnTestSkipped(SkipReason);
-//        return;
-//    }
-//
-//    NotifyOnAssume(CurrentParameter);
-//
-//    if (bHasResult)
-//    {
-//        // This can happen with failed assumptions, for instance.
-//        return;
-//    }
-//
-//    NotifyOnArrange(CurrentParameter);
-//    NotifyOnAct(CurrentParameter);
-//}
-//
+
+void ATestForgeTestActor::RunTest(UObject* TestParameter)
+{
+    CurrentParameter = TestParameter;
+    bHasResult = false;
+    bHadTimeout = false;
+
+    if (!SkipReason.IsEmpty())
+    {
+        NotifyOnTestSkipped();
+        return;
+    }
+
+    NotifyOnAssume();
+
+    if (bHasResult)
+    {
+        // This can happen with failed assumptions, for instance.
+        return;
+    }
+
+    NotifyOnArrange();
+    NotifyOnAct();
+}
+
 //void ATestForgeTestActor::FinishAct()
 //{
 //    if (bHasResult)
@@ -89,12 +89,12 @@
 //        NotifyOnTestSuccessful();
 //    }
 //}
-//
-//float ATestForgeTestActor::GetTimeoutInSeconds() const
-//{
-//    return TimeoutInSeconds;
-//}
-//
+
+float ATestForgeTestActor::GetTimeoutInSeconds() const
+{
+    return TimeoutInSeconds;
+}
+
 //void ATestForgeTestActor::Timeout()
 //{
 //    // Enough waiting. Let's see the results.
@@ -104,17 +104,17 @@
 //
 //    FinishAct();
 //}
-//
-//TArray<TSoftObjectPtr<UObject>> ATestForgeTestActor::GetParameters() const
-//{
-//    return Parameters;
-//}
-//
-//UObject* ATestForgeTestActor::GetCurrentParameter() const
-//{
-//    return CurrentParameter;
-//}
-//
+
+TArray<TSoftObjectPtr<UObject>> ATestForgeTestActor::GetParameters() const
+{
+    return Parameters;
+}
+
+UObject* ATestForgeTestActor::GetCurrentParameter() const
+{
+    return CurrentParameter;
+}
+
 //TSharedPtr<FTestForgeTestResultData> ATestForgeTestActor::CollectResults() const
 //{
 //    return MakeShareable(new FTestForgeTestResultData());
@@ -152,42 +152,42 @@
 //
 //    OnTestFailed.Broadcast(this, CurrentParameter, Message);
 //}
-//
-//void ATestForgeTestActor::NotifyOnTestSkipped(const FString& InSkipReason)
-//{
-//    if (bHasResult)
-//    {
-//        return;
-//    }
-//
-//    bHasResult = true;
-//
-//    OnTestSkipped.Broadcast(this, CurrentParameter, InSkipReason);
-//}
-//
-//void ATestForgeTestActor::NotifyOnAssume(UObject* Parameter)
-//{
-//    ReceiveOnAssume(Parameter);
-//}
-//
-//void ATestForgeTestActor::NotifyOnArrange(UObject* Parameter)
-//{
-//    ReceiveOnArrange(Parameter);
-//}
-//
-//void ATestForgeTestActor::NotifyOnAct(UObject* Parameter)
-//{
-//    ReceiveOnAct(Parameter);
-//}
-//
-//void ATestForgeTestActor::NotifyOnAssert(UObject* Parameter)
-//{
-//    UTestForgeTestAssertBlueprintFunctionLibrary::AssertFalse(bHadTimeout,
-//                                                        TEXT("The test had a timeout."), this);
-//														
-//    ReceiveOnAssert(Parameter);
-//}
-//
+
+void ATestForgeTestActor::NotifyOnTestSkipped()
+{
+    if (bHasResult)
+    {
+        return;
+    }
+
+    bHasResult = true;
+
+    OnTestSkipped.Broadcast(this, CurrentParameter, SkipReason);
+}
+
+void ATestForgeTestActor::NotifyOnAssume()
+{
+    ReceiveOnAssume();
+}
+
+void ATestForgeTestActor::NotifyOnArrange()
+{
+    ReceiveOnArrange();
+}
+
+void ATestForgeTestActor::NotifyOnAct()
+{
+    ReceiveOnAct();
+}
+
+void ATestForgeTestActor::NotifyOnAssert()
+{
+    /*UTestForgeTestAssertBlueprintFunctionLibrary::AssertFalse(bHadTimeout,
+                                                        TEXT("The test had a timeout."), this);*/
+														
+    ReceiveOnAssert();
+}
+
 //void ATestForgeTestActor::BeginPlay()
 //{
 //    Super::BeginPlay();
@@ -225,7 +225,7 @@
 //    return RecordingSettings.bIsRecording;
 //}
 //
-//void ATestForgeTestActor::ReceiveOnAct_Implementation(UObject* Parameter)
+//void ATestForgeTestActor::ReceiveOnAct_Implementation()
 //{
 //    FinishAct();
 //}

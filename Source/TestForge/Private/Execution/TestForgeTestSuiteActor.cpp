@@ -1,7 +1,8 @@
 // Copyright 2023 Ramon Janousch. All Rights Reserved.
 
-#include "TestForge/Public/Execution/TestForgeTestSuiteActor.h"
-//#include "TestForgeTestActor.h"
+#include "Execution/TestForgeTestSuiteActor.h"
+#include "Core/TestForgeTestActor.h"
+#include "Core/TestForgeLogCategory.h"
 //#include "TestForgeTestLogCategory.h"
 //#include "TestForgeTestReportWriter.h"
 //#include <Engine/World.h>
@@ -12,8 +13,8 @@ ATestForgeTestSuiteActor::ATestForgeTestSuiteActor()
     // We need to be able to time out even while gameplay is paused.
     PrimaryActorTick.bTickEvenWhenPaused = true;
 
+    TestIndex = -1;
     //    bRunInPIE = true;
-    //    TestIndex = -1;
 }
 
 //void ATestForgeTestSuiteActor::BeginPlay()
@@ -25,113 +26,114 @@ ATestForgeTestSuiteActor::ATestForgeTestSuiteActor()
 //    Result.TestSuiteName = GetName();
 //    Result.Timestamp = FDateTime::UtcNow();
 //}
-//
-//void ATestForgeTestSuiteActor::Tick(float DeltaSeconds)
-//{
-//    Super::Tick(DeltaSeconds);
-//
-//    if (!IsRunning())
-//    {
-//        // Check if we should run all tests immediately.
-//        // Happening in first Tick to make sure all actors have begun play.
-//        if (bRunInPIE && GetWorld()->IsPlayInEditor() && TestIndex < 0)
-//        {
-//            RunAllTests();
-//        }
-//
-//        return;
-//    }
-//
-//    TestTimeSeconds += DeltaSeconds;
-//
-//    ATestForgeTestActor* CurrentTest = GetCurrentTest();
-//
-//    if (TestTimeSeconds >= CurrentTest->GetTimeoutInSeconds())
-//    {
-//        CurrentTest->Timeout();
-//    }
-//}
-//
-//void ATestForgeTestSuiteActor::RunAllTests()
-//{
-//    UE_LOG(LogTestForgeTest, Display, TEXT("ATestForgeTestSuiteActor::RunAllTests - Test Suite: %s"),
-//           *GetName());
-//
-//    NotifyOnBeforeAll();
-//
-//    TestIndex = -1;
-//    TestParameterIndex = -1;
-//
-//    RunNextTest();
-//}
-//
-//bool ATestForgeTestSuiteActor::IsRunning() const
-//{
-//    return IsValid(GetCurrentTest());
-//}
-//
-//ATestForgeTestActor* ATestForgeTestSuiteActor::GetCurrentTest() const
-//{
-//    return Tests.IsValidIndex(TestIndex) ? Tests[TestIndex] : nullptr;
-//}
-//
-//UObject* ATestForgeTestSuiteActor::GetCurrentTestParameter() const
-//{
-//    const ATestForgeTestActor* Test = GetCurrentTest();
-//    if (!IsValid(Test))
-//    {
-//        return nullptr;
-//    }
-//
-//    TArray<TSoftObjectPtr<UObject>> TestParameters = Test->GetParameters();
-//    if (!TestParameters.IsValidIndex(TestParameterIndex))
-//    {
-//        return nullptr;
-//    }
-//    
-//    UObject* Parameter = TestParameters[TestParameterIndex].LoadSynchronous();
-//    if (!IsValid(Parameter))
-//    {
-//        return nullptr;
-//    }
-//
-//    // If this is a reference to a Blueprint class, a default object of that Blueprint is returned.
-//    const bool bIsABlueprint = Parameter->IsA(UBlueprint::StaticClass());
-//    if (bIsABlueprint && Parameter->IsAsset())
-//    {
-//        const FString ClassSuffix = TEXT("_C");
-//        const FString Name = Parameter->GetPathName() + ClassSuffix;
-//        const UClass* ParameterObjectClass = LoadClass<UObject>(nullptr, *Name);
-//        if (IsValid(ParameterObjectClass))
-//        {
-//            return ParameterObjectClass->GetDefaultObject();
-//        }
-//    }
-//
-//    return Parameter;
-//}
-//
-//FString ATestForgeTestSuiteActor::GetCurrentTestName() const
-//{
-//    ATestForgeTestActor* Test = GetCurrentTest();
-//
-//    if (!IsValid(Test))
-//    {
-//        return FString();
-//    }
-//
-//    FString TestName = Test->GetName();
-//
-//    UObject* Parameter = GetCurrentTestParameter();
-//
-//    if (IsValid(Parameter))
-//    {
-//        TestName += TEXT(" - ") + Parameter->GetName();
-//    }
-//
-//    return TestName;
-//}
-//
+
+void ATestForgeTestSuiteActor::Tick(float DeltaSeconds)
+{
+    Super::Tick(DeltaSeconds);
+
+    if (!IsRunning())
+    {
+        // Check if we should run all tests immediately.
+        // Happening in first Tick to make sure all actors have begun play.
+        //if (bRunInPIE && GetWorld()->IsPlayInEditor() && TestIndex < 0)
+        if (TestIndex < 0)
+        {
+            RunAllTests();
+        }
+
+        return;
+    }
+
+    TestTimeSeconds += DeltaSeconds;
+
+    ATestForgeTestActor* CurrentTest = GetCurrentTest();
+
+    if (TestTimeSeconds >= CurrentTest->GetTimeoutInSeconds())
+    {
+        //CurrentTest->Timeout();
+    }
+}
+
+void ATestForgeTestSuiteActor::RunAllTests()
+{
+    UE_LOG(LogTestForge, Display, TEXT("ATestForgeTestSuiteActor::RunAllTests - Test Suite: %s"),
+           *GetName());
+
+    //NotifyOnBeforeAll();
+
+    TestIndex = -1;
+    //TestParameterIndex = -1;
+
+    RunNextTest();
+}
+
+bool ATestForgeTestSuiteActor::IsRunning() const
+{
+    return IsValid(GetCurrentTest());
+}
+
+ATestForgeTestActor* ATestForgeTestSuiteActor::GetCurrentTest() const
+{
+    return Tests.IsValidIndex(TestIndex) ? Tests[TestIndex] : nullptr;
+}
+
+UObject* ATestForgeTestSuiteActor::GetCurrentTestParameter() const
+{
+    const ATestForgeTestActor* Test = GetCurrentTest();
+    if (!IsValid(Test))
+    {
+        return nullptr;
+    }
+
+    TArray<TSoftObjectPtr<UObject>> TestParameters = Test->GetParameters();
+    if (!TestParameters.IsValidIndex(TestParameterIndex))
+    {
+        return nullptr;
+    }
+    
+    UObject* Parameter = TestParameters[TestParameterIndex].LoadSynchronous();
+    if (!IsValid(Parameter))
+    {
+        return nullptr;
+    }
+
+    // If this is a reference to a Blueprint class, a default object of that Blueprint is returned.
+    const bool bIsABlueprint = Parameter->IsA(UBlueprint::StaticClass());
+    if (bIsABlueprint && Parameter->IsAsset())
+    {
+        const FString ClassSuffix = TEXT("_C");
+        const FString Name = Parameter->GetPathName() + ClassSuffix;
+        const UClass* ParameterObjectClass = LoadClass<UObject>(nullptr, *Name);
+        if (IsValid(ParameterObjectClass))
+        {
+            return ParameterObjectClass->GetDefaultObject();
+        }
+    }
+
+    return Parameter;
+}
+
+FString ATestForgeTestSuiteActor::GetCurrentTestName() const
+{
+    ATestForgeTestActor* Test = GetCurrentTest();
+
+    if (!IsValid(Test))
+    {
+        return FString();
+    }
+
+    FString TestName = Test->GetName();
+
+    UObject* Parameter = GetCurrentTestParameter();
+
+    if (IsValid(Parameter))
+    {
+        TestName += TEXT(" - ") + Parameter->GetName();
+    }
+
+    return TestName;
+}
+
 //const FTestForgeTestSuiteResult& ATestForgeTestSuiteActor::GetResult() const
 //{
 //    return Result;
@@ -168,90 +170,92 @@ ATestForgeTestSuiteActor::ATestForgeTestSuiteActor()
 //{
 //    ReceiveOnAfterEach();
 //}
-//
-//void ATestForgeTestSuiteActor::RunNextTest()
-//{
-//    ATestForgeTestActor* CurrentTest = GetCurrentTest();
-//
-//    // Unregister events.
-//    if (IsValid(CurrentTest))
-//    {
-//        CurrentTest->OnTestSuccessful.RemoveDynamic(this, &ATestForgeTestSuiteActor::OnTestSuccessful);
-//        CurrentTest->OnTestFailed.RemoveDynamic(this, &ATestForgeTestSuiteActor::OnTestFailed);
-//        CurrentTest->OnTestSkipped.RemoveDynamic(this, &ATestForgeTestSuiteActor::OnTestSkipped);
-//    }
-//
-//    // Prepare test run with next parameter.
-//    ++TestParameterIndex;
-//
-//    UObject* CurrentTestParameter = GetCurrentTestParameter();
-//
-//    if (!IsValid(CurrentTestParameter))
-//    {
-//        // Prepare next test.
-//        ++TestIndex;
-//        TestParameterIndex = 0;
-//
-//        // Apply parameter providers.
-//        ATestForgeTestActor* NextTest = GetCurrentTest();
-//
-//        if (IsValid(NextTest))
-//        {
-//            NextTest->ApplyParameterProviders();
-//        }
-//    }
-//
-//    TestTimeSeconds = 0.0f;
-//
-//    if (!Tests.IsValidIndex(TestIndex))
-//    {
-//        // All tests finished.
-//        UE_LOG(LogTestForgeTest, Display, TEXT("ATestForgeTestSuiteActor::RunNextTest - All tests finished."));
-//
-//        NotifyOnAfterAll();
-//
-//        // Check if any test failed.
-//        for (const FTestForgeTestResult& TestResult : Result.TestResults)
-//        {
-//            if (!TestResult.FailureMessage.IsEmpty())
-//            {
-//                OnTestSuiteFailed.Broadcast(this);
-//                return;
-//            }
-//        }
-//
-//        OnTestSuiteSuccessful.Broadcast(this);
-//        return;
-//    }
-//
-//    ATestForgeTestActor* Test = GetCurrentTest();
-//
-//    if (IsValid(Test))
-//    {
-//        FString TestName = GetCurrentTestName();
-//        UE_LOG(LogTestForgeTest, Display, TEXT("ATestForgeTestSuiteActor::RunNextTest - Test: %s"), *TestName);
-//
-//        // Register events.
-//        Test->OnTestSuccessful.AddDynamic(this, &ATestForgeTestSuiteActor::OnTestSuccessful);
-//        Test->OnTestFailed.AddDynamic(this, &ATestForgeTestSuiteActor::OnTestFailed);
-//        Test->OnTestSkipped.AddDynamic(this, &ATestForgeTestSuiteActor::OnTestSkipped);
-//
-//        // Run test.
-//        NotifyOnBeforeEach();
-//
-//        UObject* TestParameter = GetCurrentTestParameter();
-//        Test->RunTest(TestParameter);
-//    }
-//    else
-//    {
-//        UE_LOG(LogTestForgeTest, Error,
-//               TEXT("ATestForgeTestSuiteActor::RunNextTest - %s has invalid test at index %i, skipping."),
-//               *GetName(), TestIndex);
-//
-//        RunNextTest();
-//    }
-//}
-//
+
+void ATestForgeTestSuiteActor::RunNextTest()
+{
+    ATestForgeTestActor* CurrentTest = GetCurrentTest();
+
+    // Unregister events.
+    if (IsValid(CurrentTest))
+    {
+        /*CurrentTest->OnTestSuccessful.RemoveDynamic(this, &ATestForgeTestSuiteActor::OnTestSuccessful);
+        CurrentTest->OnTestFailed.RemoveDynamic(this, &ATestForgeTestSuiteActor::OnTestFailed);
+        CurrentTest->OnTestSkipped.RemoveDynamic(this, &ATestForgeTestSuiteActor::OnTestSkipped);*/
+    }
+
+    // Prepare test run with next parameter.
+    //++TestParameterIndex;
+
+    //UObject* CurrentTestParameter = GetCurrentTestParameter();
+
+    //if (!IsValid(CurrentTestParameter))
+    //{
+    //    // Prepare next test.
+    //    ++TestIndex;
+    //    TestParameterIndex = 0;
+
+    //    // Apply parameter providers.
+    //    ATestForgeTestActor* NextTest = GetCurrentTest();
+
+    //    if (IsValid(NextTest))
+    //    {
+    //        NextTest->ApplyParameterProviders();
+    //    }
+    //}
+
+    TestTimeSeconds = 0.0f;
+
+    if (!Tests.IsValidIndex(TestIndex))
+    {
+        // All tests finished.
+        UE_LOG(LogTestForge, Display, TEXT("ATestForgeTestSuiteActor::RunNextTest - All tests finished."));
+
+        //NotifyOnAfterAll();
+
+        // Check if any test failed.
+        /*for (const FTestForgeTestResult& TestResult : Result.TestResults)
+        {
+            if (!TestResult.FailureMessage.IsEmpty())
+            {
+                OnTestSuiteFailed.Broadcast(this);
+                return;
+            }
+        }
+
+        OnTestSuiteSuccessful.Broadcast(this);*/
+        return;
+    }
+
+    ATestForgeTestActor* Test = GetCurrentTest();
+
+    if (IsValid(Test))
+    {
+        FString TestName = GetCurrentTestName();
+        UE_LOG(LogTestForge, Display, TEXT("ATestForgeTestSuiteActor::RunNextTest - Test: %s"),
+               *TestName);
+
+        // Register events.
+        /*Test->OnTestSuccessful.AddDynamic(this, &ATestForgeTestSuiteActor::OnTestSuccessful);
+        Test->OnTestFailed.AddDynamic(this, &ATestForgeTestSuiteActor::OnTestFailed);
+        Test->OnTestSkipped.AddDynamic(this, &ATestForgeTestSuiteActor::OnTestSkipped);*/
+
+        // Run test.
+        //NotifyOnBeforeEach();
+
+        UObject* TestParameter = GetCurrentTestParameter();
+        Test->RunTest(TestParameter);
+    }
+    else
+    {
+        UE_LOG(LogTestForge, Error,
+               TEXT("ATestForgeTestSuiteActor::RunNextTest - %s has invalid test at index %i, "
+                    "skipping."),
+               *GetName(), TestIndex);
+
+        RunNextTest();
+    }
+}
+
 //void ATestForgeTestSuiteActor::OnTestSuccessful(ATestForgeTestActor* Test, UObject* Parameter)
 //{
 //    if (Test != GetCurrentTest())
